@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <kernel/uart.h>
+#include <kernel/gpio.h>
 #include <common/stdlib.h>
 
 // Memory-Mapped I/O output

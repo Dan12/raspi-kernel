@@ -70,7 +70,11 @@ dbg:
 dbgrun: build gdbinit
 	qemu-system-arm -m 128 -no-reboot -M raspi2 -serial stdio -kernel $(IMG_NAME).elf -S -s
 
-.PHONY: gdbinit
+.PHONY: gdbinit hard
 gdbinit:
 	echo "target remote localhost:1234" > .gdbinit
 	echo "break kernel_main" >> .gdbinit
+
+hard: DIRECTIVES += -D HARDWARE
+	
+hard: build

@@ -55,14 +55,15 @@ void gpu_putc(char c) {
 }
 
 void gpu_init(void) {
-    static const pixel_t BLACK = {0x00, 0x00, 0x00};
+    // static const pixel_t BLACK = {0x00, 0x00, 0x00};
+    static const pixel_t WHITE = {0xff, 0xff, 0xff};
     // Aparantly, this sometimes does not work, so try in a loop
     while(framebuffer_init());
 
     // clear screen
     for (uint32_t j = 0; j < fbinfo.height; j++) {
         for (uint32_t i = 0; i < fbinfo.width; i++) {
-            write_pixel(i,j,&BLACK);
+            write_pixel(i,j,&WHITE);
         }
     }
 }

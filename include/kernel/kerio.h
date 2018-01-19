@@ -1,8 +1,6 @@
 #ifndef STDIO_H
 #define STDIO_H
 
-#define HARDWARE
-
 char getc(void);
 void putc(char c);
 

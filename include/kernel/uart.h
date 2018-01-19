@@ -51,16 +51,6 @@ void delay(int32_t count);
 
 enum
 {
-    // The GPIO registers base address.
-    GPIO_BASE = PERIPHERAL_BASE + GPIO_OFFSET,
-    // The offsets for reach register.
-
-    // Controls actuation of pull up/down to ALL GPIO pins.
-    GPPUD = (GPIO_BASE + 0x94),
-
-    // Controls actuation of pull up/down for specific GPIO pin.
-    GPPUDCLK0 = (GPIO_BASE + 0x98),
-
     // The base address for UART.
     UART0_BASE = PERIPHERAL_BASE + UART0_OFFSET,
 

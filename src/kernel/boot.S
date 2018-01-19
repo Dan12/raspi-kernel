@@ -14,11 +14,14 @@
 _start:
     // This set of instructions sets 3 of the 4 cores to go to halt.
     // Model 1 only has 1 cpu and does not have this instruction, so don't include it if building for model 1
+    // Just don't disable on hardware, otherwise the system doesn't start up
+#ifndef HARDWARE
 #ifndef MODEL_1
     mrc p15, #0, r1, c0, c0, #5
     and r1, r1, #3
     cmp r1, #2
     bne halt
+#endif
 #endif
     // Setup the stack.  Stack will be 32 KB above kernel image
     ldr sp, =__end
@@ -44,9 +47,7 @@ _start:
     blo 1b
 
     // Call kernel_main
-	mov r2, #0x100
     bl kernel_main
-    b halt
 
 // halt
 halt:
