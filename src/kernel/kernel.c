@@ -20,14 +20,17 @@ void test(void) {
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
-    int i = 0;
     // Declare as unused
     (void) r0;
     (void) r1;
-    (void) atags;
+    // (void) atags;
+
+    char buf[256];
 
     mem_init((atag_t *)atags);
-    gpu_init();
+
+    #ifdef HARDWARE
+    gpu_init(); 
     printf("GPU INITIALIZED\n");
     printf("INITIALIZING INTERRUPTS...");
     interrupts_init();
@@ -38,13 +41,27 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     printf("INITIALIZING SCHEDULER...");
     process_init();
     printf("DONE\n");
+    #endif
 
     puts("Hello, kernel World!\n");
 
+    #ifdef HARDWARE
+
     create_kernel_thread(test, "TEST", 4);
 
+    int i = 0;
     while (1) {
         printf("main %d\n", i++);
         udelay(1000000);
     }
+
+    #else
+
+    while (1) {
+        gets(buf, 256);
+        puts(buf);
+        puts("\n"); 
+    }
+
+    #endif
 }

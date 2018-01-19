@@ -7,6 +7,9 @@ uint32_t get_mem_size(atag_t * tag) {
        }
        tag = (atag_t *)(((uint32_t *)tag) + tag->tag_size);
    }
-   return 0;
+
+   // 1<<27 = 128mb
+   // we will play it safe by only saying 1/4th of that, which is still 32mb
+   return 1<<24;
 
 }

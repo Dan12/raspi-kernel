@@ -1,7 +1,9 @@
 # Don't use normal gcc, use the arm cross compiler
-TOOLCHAIN = ./gcc-arm-none-eabi-6-2017-q2-update/bin/arm-none-eabi
+# TOOLCHAIN = ./gcc-arm-none-eabi-6-2017-q2-update/bin/arm-none-eabi
+TOOLCHAIN = ../../gcc-arm/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi
 CC = $(TOOLCHAIN)-gcc
-OBJCOPY = $(TOOLCHAIN)-objcopy
+# OBJCOPY = $(TOOLCHAIN)-objcopy
+OBJCOPY = $(TOOLCHAIN)-objcopy-cpd
 GDB = $(TOOLCHAIN)-gdb
 
 
@@ -10,9 +12,11 @@ ifeq ($(RASPI_MODEL),1)
 	CPU = arm1176jzf-s
 	DIRECTIVES = -D MODEL_1
 	ARCHDIR = model1
+	IMG_NAME=kernel
 else
 	CPU = cortex-a7
 	ARCHDIR = model2
+	IMG_NAME=kernel7
 endif
 
 CFLAGS= -mcpu=$(CPU) -fpic -ffreestanding $(DIRECTIVES) -g
@@ -32,8 +36,6 @@ OBJECTS = $(patsubst $(KER_SRC)/%.c, $(OBJ_DIR)/%.o, $(KERSOURCES))
 OBJECTS += $(patsubst $(COMMON_SRC)/%.c, $(OBJ_DIR)/%.o, $(COMMONSOURCES))
 OBJECTS += $(patsubst $(KER_SRC)/%.S, $(OBJ_DIR)/%.o, $(ASMSOURCES))
 HEADERS = $(wildcard $(KER_HEAD)/*.h)
-
-IMG_NAME=kernel
 
 build: $(OBJECTS) $(HEADERS)
 	$(CC) -T linker.ld -o $(IMG_NAME).elf $(LFLAGS) $(OBJECTS)
@@ -61,12 +63,12 @@ clean:
 	rm $(IMG_NAME).img
 
 run: build
-	qemu-system-arm -m 128 -no-reboot -M raspi2 -serial stdio -kernel kernel.elf
+	qemu-system-arm -m 128 -no-reboot -M raspi2 -serial stdio -kernel $(IMG_NAME).elf
 
 dbg:
 	$(GDB) kernel.elf
 dbgrun: build gdbinit
-	qemu-system-arm -m 128 -no-reboot -M raspi2 -serial stdio -kernel kernel.elf -S -s
+	qemu-system-arm -m 128 -no-reboot -M raspi2 -serial stdio -kernel $(IMG_NAME).elf -S -s
 
 .PHONY: gdbinit
 gdbinit:

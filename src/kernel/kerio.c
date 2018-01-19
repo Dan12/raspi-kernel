@@ -9,7 +9,11 @@ char getc(void) {
 }
 
 void putc(char c) {
+    #ifdef HARDWARE
     gpu_putc(c);
+    #else
+    uart_putc(c);
+    #endif
 }
 
 void puts(const char * str) {
@@ -28,7 +32,7 @@ void gets(char * buf, int buflen) {
     }
 
     putc('\n');
-    if (c == '\n') {
+    if (c == '\n' || c == '\r') {
         buf[i] = '\0';
     }
     else
